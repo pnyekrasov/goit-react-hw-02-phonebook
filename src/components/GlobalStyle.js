@@ -27,7 +27,6 @@ p {
 ul { 
     margin: 0;
     padding: 0;
-    list-style: none;
 }
 
 img {
@@ -41,7 +40,7 @@ button {
   padding: 4px 8px;
   font-family: inherit;
   font-weight: 500;
-  font-size: 18px;
+  font-size: 12px;
   cursor: pointer;
   border: 1px solid #eef0f2;
   border-radius: 4px;

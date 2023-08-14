@@ -3,8 +3,18 @@ import * as Yup from 'yup';
 import { Label, StyledForm, StyledField, Button } from './ContactForm.staled';
 
 const schema = Yup.object().shape({
-  name: Yup.string().trim().min(2, 'Too Short!').required('Required'),
-  number: Yup.number().min(3, 'Too Short!').required('Required'),
+  name: Yup.string()
+    .required('Name is required')
+    .matches(
+      /^ [a - zA - Zа - яА - Я] + (([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/g,
+      "Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+    ),
+  phoneNumber: Yup.string()
+    .required('Phone number is required')
+    .matches(
+      /\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}/g,
+      'Phone number must be digits and can contain spaces, dashes, parentheses and can start with +'
+    ),
 });
 
 export const ContactForm = () => {
@@ -12,7 +22,7 @@ export const ContactForm = () => {
     <Formik
       initialValues={{
         name: '',
-        number: '',
+        phoneNumber: '',
       }}
       validationSchema={schema}
       onSubmit={values => {
@@ -22,14 +32,14 @@ export const ContactForm = () => {
       <StyledForm>
         <Label>
           Name
-          <StyledField name="name" placeholder="Jane Smit" />
+          <StyledField name="name" />
           <ErrorMessage name="name" />
         </Label>
 
         <Label>
-          Number
-          <StyledField name="number" placeholder="XXX-XX-XX" />
-          <ErrorMessage name="number" />
+          Phone Number
+          <StyledField name="phoneNumber" />
+          <ErrorMessage name="phoneNumber" />
         </Label>
 
         <Button type="submit">Add contact</Button>

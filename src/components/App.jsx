@@ -1,5 +1,5 @@
 import { ContactForm } from './ContactForm/ContactForm';
-import { ContactsBook, Text } from './App.staled';
+import { ContactsBook } from './App.staled';
 import { Component } from 'react';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
@@ -16,7 +16,12 @@ export class App extends Component {
   };
 
   handleAddContact = newContact => {
-    console.log(newContact);
+    const { contacts } = this.state;
+    for (const contact of contacts) {
+      if (contact.name === newContact.name) {
+        return alert(`${newContact.name} is already in contacts`);
+      }
+    }
     this.setState(prevState => {
       return {
         contacts: [...prevState.contacts, newContact],
@@ -24,16 +29,44 @@ export class App extends Component {
     });
   };
 
+  handleDeleteContact = contactId => {
+    this.setState(prevState => {
+      return {
+        contacts: prevState.contacts.filter(
+          contact => contact.id !== contactId
+        ),
+      };
+    });
+  };
+
+  handleChangeNameFilter = newName => {
+    this.setState({
+      filter: newName,
+    });
+  };
+
+  handleGetVisibleContact = () => {
+    const { contacts, filter } = this.state;
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  };
+
   render() {
+    const { filter } = this.state;
+    const visibleContact = this.handleGetVisibleContact();
+
     return (
       <ContactsBook>
         <h1>Phonebook</h1>
         <ContactForm onAdd={this.handleAddContact} />
 
         <h2>Contacts</h2>
-        <Text>Find contact by name</Text>
-        <Filter />
-        <ContactList items={this.state.contacts} />
+        <Filter nameFilter={filter} onChange={this.handleChangeNameFilter} />
+        <ContactList
+          items={visibleContact}
+          onDelete={this.handleDeleteContact}
+        />
       </ContactsBook>
     );
   }

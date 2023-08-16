@@ -17,11 +17,11 @@ export class App extends Component {
 
   handleAddContact = newContact => {
     const { contacts } = this.state;
-    for (const contact of contacts) {
-      if (contact.name === newContact.name) {
-        return alert(`${newContact.name} is already in contacts`);
-      }
-    }
+    contacts.find(contact =>
+      contact.name === newContact.name
+        ? alert(`${newContact.name} is already in contacts`)
+        : ''
+    );
     this.setState(prevState => {
       return {
         contacts: [...prevState.contacts, newContact],
